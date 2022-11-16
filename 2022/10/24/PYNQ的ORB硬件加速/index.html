@@ -4,8 +4,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="AXI-Stream note, 动漫|学习">
-    <meta name="description" content="由于最近需要对VDMA后端做一个数据接受接口，用于接收VDMA中来自DDR的图像数据流，并且在后续ip中便于对图像数据流进行操作，首先对AXI-Stream bus信号进行学习，主要参考资料是ARM的AMBA 4 AXI4-Stream手册">
+    <meta name="keywords" content="PYNQ的ORB硬件加速, 动漫|学习">
+    <meta name="description" content=" 最近终于完成了FPGA对ORB特征匹配的硬件加速，特别感谢在困惑时的指点，本文记录硬件加速结构的搭建过程以及目前版本特征提取匹配的结果记录，用于后续论文写作，实际运行结果效果如下
+
+FAST特征提取图像特征提取算法采用的FAST算法，FA">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +21,7 @@
 
     
 
-    <title>AXI-Stream note | 郭弘扬的Blog</title>
+    <title>PYNQ的ORB硬件加速 | 郭弘扬的Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -309,12 +311,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">AXI-Stream note</h1>
+                    <h1 class="description center-align post-title">PYNQ的ORB硬件加速</h1>
                 </div>
             </div>
         </div>
@@ -442,7 +444,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-06-10
+                    2022-10-24
                 </div>
                 
 
@@ -463,62 +465,39 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>由于最近需要对VDMA后端做一个数据接受接口，用于接收VDMA中来自DDR的图像数据流，并且在后续ip中便于对图像数据流进行操作，首先对AXI-Stream bus信号进行学习，主要参考资料是ARM的AMBA 4 AXI4-Stream手册</p>
-<p>对于视频流中一个字节可能包含三种不同的信息：数据、占位符（用于指示字节在流中相对位置，不包含相关真实数据）、空</p>
-<p>同时对于流中数据量的大小也有明确层级划分，transfer（一次握手所传递的信息量），packet（packet可以理解为burst传输，数据包中包含的数据可以是一次transfer中的数据也可以是多次transfer的数据），frame（字节分组的最高级别，包含整数个数据包）</p>
-<h3 id="数据流"><a href="#数据流" class="headerlink" title="数据流"></a>数据流</h3><p>对于一次握手中，可以传输任意数量数据字节，空字节可以从流中插入或删除</p>
-<p><img src="/2022/06/10/AXI-Stream-note/image-20220609211048693.png" alt="image-20220609211048693"></p>
-<p>常见数据流中包含空字节如图</p>
-<p><img src="/2022/06/10/AXI-Stream-note/image-20220609211121751.png" alt="image-20220609211121751"></p>
-<p>上图是一个32位宽的<strong>对齐（aligned）数据流</strong>，不包含空字节</p>
-<p><strong>连续未对齐数据流</strong></p>
-<p>数据流中有不同数据包，在数据包开始或结束处有任意数量的连续位置字节</p>
-<p><img src="/2022/06/10/AXI-Stream-note/image-20220609211447932.png" alt="image-20220609211447932"></p>
-<h3 id="接口信号"><a href="#接口信号" class="headerlink" title="接口信号"></a>接口信号</h3><p>下图是接口信号的手册规定图：</p>
-<p><img src="/2022/06/10/AXI-Stream-note/image-20220609211933585.png" alt="image-20220609211933585"></p>
-<p>使用到的信号有tdata，tkeep，tlast，tready，tuser，tvalid，所以本文后续只关注这几个相关信号时序，其他信号本文不再涉及</p>
-<h3 id="三种握手机制"><a href="#三种握手机制" class="headerlink" title="三种握手机制"></a>三种握手机制</h3><p>1.TVALID在TREADY前置高</p>
-<p>在此种情况下，一旦TVALID被置位，来自与主设备的控制信息以及数据必须保持不变，直到TREADY被驱动到高位，发生信息传输</p>
-<img src="/2022/06/10/AXI-Stream-note/image-20220610110046445.png" alt="image-20220610110046445" style="zoom:50%;">
+                <p> 最近终于完成了FPGA对ORB特征匹配的硬件加速，特别感谢在困惑时的指点，本文记录硬件加速结构的搭建过程以及目前版本特征提取匹配的结果记录，用于后续论文写作，实际运行结果效果如下</p>
+<p><video src="D:/users/blogs/source/_posts/hexo_video/feature.mp4" position="absolute" width="100%" height="100%" controls="controls"></video></p>
+<h3 id="FAST特征提取"><a href="#FAST特征提取" class="headerlink" title="FAST特征提取"></a>FAST特征提取</h3><p>图像特征提取算法采用的FAST算法，FAST中亮点暗点利用补码运算的思路，fast主要划分为几个电路部分，为了减少在行缓存处的时钟开销，bresenham中的缓存电路结构利用行移位寄存器进行开窗，行缓存fifo采用block ram，整体电路如下</p>
+<img src="/2022/10/24/PYNQ%E7%9A%84ORB%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/image-20221024145510692.png" alt="image-20221024145510692" style="zoom:50%;">
 
-<p>2.TREADY在TVALID前置高</p>
-<p>从机线将TREADY置高，此时主机一旦置高TVALID，数据将会进行传输，<strong>在本次设计maxis2raw模块时，将采用此种握手机制</strong>，默认将从机TREADY一直置高</p>
-<img src="/2022/06/10/AXI-Stream-note/image-20220610110432214.png" alt="image-20220610110432214" style="zoom:50%;">
+<p>整个FAST数据流协议采用axi-stream数据流协议，整个体统框图如下：</p>
+<p><img src="/2022/10/24/PYNQ%E7%9A%84ORB%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/image-20221024152250124.png" alt="image-20221024152250124"></p>
+<h4 id="bresenham模块"><a href="#bresenham模块" class="headerlink" title="bresenham模块"></a>bresenham模块</h4><p>bresenham模块主要生成中心点和16个bresenham环上待测点的的灰度值补码，其中中心点灰度值默认为负，模块利用7个移位寄存器以及6个行缓存来实现操作，为了方便后续电路计算标记点与中心点差值的绝对值，point1-point16和cen灰度值位宽设定为9，之后这16个点简记为p1-p16，p1-p16低8位为像素灰度值，最高位补0，cen低8位为像素灰度值取反加一，最高位补1。</p>
+<p>像素点移动至窗中心时，消耗的时钟周期为：IMAGE_WIDTH*3+4，对应同步信号进行延时相同周期数</p>
+<h4 id="feature-detec模块"><a href="#feature-detec模块" class="headerlink" title="feature_detec模块"></a>feature_detec模块</h4><p>在FAST算法中，检测一个点是否是特征点，需要满足周围16个标记点与中心点的差值的绝对值有连续9个大于设定阈值，opencv中原作者提高系统运行效率，优先判断中心点正上正下正左正右4个标记点，p1、p5、p9、p13是否能有连续三个点大于阈值，但是对于fpga来说，可以进行高并行度的计算，则此模块直接对16个标记点均进行计算并与阈值进行比较</p>
+<p>本模块采用阈值标志位threshold_flag[15:0]记录标记点与中心点差值绝对值与阈值比对情况，可能满足亮点暗点连续出现9个的情况共有16种情况，16种情况作为parameter存入寄存器中待使用，整个模块运算周期是4个周期</p>
+<ul>
+<li>第一个周期，将p1-p16补码与中心点补码进行相加运算，完成做差运算</li>
+<li>第二个周期，获得差值的绝对值，最高位为0则取低8位，最高位为1则将低8位取反加一</li>
+<li>第三个周期，将对应绝对值与阈值进行比较，pi的绝对值若大于阈值，threshold_hold[i]被置1，反之置0</li>
+<li>第四个周期，将threshold标志位与寄存器中对应情况进行比对，若满足则对应特征标志位被拉高</li>
+</ul>
+<h4 id="fea-score模块"><a href="#fea-score模块" class="headerlink" title="fea_score模块"></a>fea_score模块</h4><p>利用上面两个电路模块计算获得的特征点数目往往超出空间映射所需特征点数目，需要对特征点进行评判并进行筛选，在opencv中算法是不断提高阈值使得阈值刚好满足特征点判断点条件，若再提升阈值则该点不满足特征点判断条件,下图以16个点到中心点的距离表示标记点与中心点做差绝对值的大小，显然阈值的变化范围是从中心点距离为0到9个连续亮点暗点距离中心点最近的那个点，特征点得分也就是9个连续亮点暗点中与中心像素差值的绝对值中的最小值</p>
+<img src="/2022/10/24/PYNQ%E7%9A%84ORB%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/image-20221024172258682.png" alt="image-20221024172258682" style="zoom: 80%;">
 
-<p>3.TREADY和TVALID在同一时钟置高</p>
-<img src="/2022/06/10/AXI-Stream-note/image-20220610110544539.png" alt="image-20220610110544539" style="zoom:50%;">
+<p>fea_score模块采用高并行度的电路，由上面讨论中我们可以得出score值就是邻域点与中心点之差的某一个，则将每个点与中心差值的绝对值作为阈值，再利用feature_detec的方法判断是否满足特征点条件，并且设置score标志位寄存器s[15:0]，将绝对值的差值乘以标志位最终比较结果最大值为该特征点打分结果</p>
+<h3 id="BRIEF描述子生成"><a href="#BRIEF描述子生成" class="headerlink" title="BRIEF描述子生成"></a>BRIEF描述子生成</h3><p>BRIEF描述子采用128bit位宽，brief描述子采用opencv128bit描述子模板</p>
+<img src="/2022/10/24/PYNQ%E7%9A%84ORB%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/image-20221116163412162.png" alt="image-20221116163412162" style="zoom:50%;">
 
-<p>需要注意的是，以上三种传输的周期实际发生都是在箭头所指的周期进行</p>
-<h3 id="对于字节位置的确定"><a href="#对于字节位置的确定" class="headerlink" title="对于字节位置的确定"></a>对于字节位置的确定</h3><p>此时只针对没有空字节的完全包压缩流，对于第n个<strong>字节</strong>在第几次传输中,w代表总线<strong>字节</strong>宽<br>$$<br>t=INT(n/w)<br>$$<br>而此次传输t中<strong>字节</strong>的相对位置b，<strong>从最低位从零向上计数</strong><br>$$<br>b= n -(t*w)<br>$$<br>于是该数据存在与整个数据流中的TDATA[(8b+7):8b]，即在在总线中哪个8位数据线中出现，这里需要注意，TDATA[k:0]只缓存一次传输的数据</p>
-<h3 id="数据合并打包以及转换"><a href="#数据合并打包以及转换" class="headerlink" title="数据合并打包以及转换"></a>数据合并打包以及转换</h3><p>由于在实际电路使用中，接口协议的TDATA位宽可由用户自己选定，类似猝发传输，传输位数在4-8等2的整数次幂中选定，于是为了适用接口宽度，在接口系统中可以重用固定宽度的接口组件</p>
-<p>对于TKEEP信号，与TKEEP相关联的信号，当TKEEP被置高，表明相关联的字节是有效数据，否则是空字节，可以被删除</p>
-<p><strong>数据合并的注意事项：</strong></p>
-<p>数据合并通常与upsizing联用，upsizing是将给定的bus宽度转换为更宽的位宽bus数据进行的操作</p>
-<p>相关信号规定：</p>
-<ul>
-<li>输出中字节的顺序必须和输入字节的顺序匹配</li>
-<li>TSTRB必须和数据同步升高</li>
-</ul>
-<h3 id="字节限定符号"><a href="#字节限定符号" class="headerlink" title="字节限定符号"></a>字节限定符号</h3><p>Tkeep和Tdata有效有效负载的字节关联关系：<br>$$<br>TKEEP[x]-&gt;TDATA[(8x+7):8x]<br>$$<br>了解了Tkeep和tdata字节相关关系后，TKEEP的功能有如下</p>
-<ul>
-<li>当tkeep被置高，tdata相关数据有效，相关数据必须传递给目标</li>
-<li>当tkeep被置低，tdata相关位数据为空数据，可以从数据流中删除</li>
-</ul>
-<p>主设备和从设备不必处理空字节，因此任何可以在数据流中插入空字节的模块需要在数据流到达无法处理空字节的目标前删除它们</p>
-<p>TSTRB是在TKEEP置位时指示关联的是数据字节还是位置字节，当TSTRB被置高，表示关联的字节包含有效信息，并且是数据字节，当被置低时表示是一个位置字节</p>
-<p><img src="/2022/06/10/AXI-Stream-note/image-20220610145928363.png" alt="image-20220610145928363"></p>
-<p>可见只有两者均为高才是有效的数据</p>
-<h3 id="用户信号"><a href="#用户信号" class="headerlink" title="用户信号"></a>用户信号</h3><p>用户信号可以作一些边带指令，可用于数据字节传输，分组或基于帧的信息</p>
-<ul>
-<li>标记特殊数据项的位置或类型</li>
-<li>提供必须随数据一起提供的辅助信息，如奇偶校验、控制信号和标志</li>
-<li>识别数据包的段</li>
-</ul>
-<p><img src="/2022/06/10/AXI-Stream-note/image-20220610160204870.png" alt="image-20220610160204870"></p>
-<p>最终理想波形如图</p>
-<p>关于tuser是一帧的起始置高，这并非用户可控，详见xilinx：<a target="_blank" rel="noopener" href="https://support.xilinx.com/s/question/0D52E000078PMKbSAO/question-about-tuser-signalmaxismm2stuser-in-vdma-mm2s-interface?language=en_US">https://support.xilinx.com/s/question/0D52E000078PMKbSAO/question-about-tuser-signalmaxismm2stuser-in-vdma-mm2s-interface?language=en_US</a></p>
-<p>这个信号是默认的</p>
-<p>同时tkeep默认无特殊情况全部拉高</p>
+<p>最终整体特征检测与特征描述电路如图所示</p>
+<img src="/2022/10/24/PYNQ%E7%9A%84ORB%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/image-20221116163612705.png" alt="image-20221116163612705" style="zoom:50%;">
+
+<h3 id="仿真结果"><a href="#仿真结果" class="headerlink" title="仿真结果"></a>仿真结果</h3><p>PL工程block design如图所示</p>
+<p><img src="/2022/10/24/PYNQ%E7%9A%84ORB%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/image-20221116164158593.png" alt="image-20221116164158593"></p>
+<p>硬件仿真结果与软件仿真结果比对，红色为软件生成特征点，蓝色为上述电路检测的特征点，重合度97%</p>
+<img src="/2022/10/24/PYNQ%E7%9A%84ORB%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/image-20221116163835735.png" alt="image-20221116163835735" style="zoom:50%;">
+
+<p>最近工作量比较大，文章后续有时间再继续填充。</p>
 
                 
             </div>
@@ -545,7 +524,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://jasonyo-cn.github.io/2022/06/10/AXI-Stream-note/">http://jasonyo-cn.github.io/2022/06/10/AXI-Stream-note/</a>
+                    <a href="http://jasonyo-cn.github.io/2022/10/24/PYNQ%E7%9A%84ORB%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/">http://jasonyo-cn.github.io/2022/10/24/PYNQ%E7%9A%84ORB%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -754,9 +733,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/10/24/PYNQ%E7%9A%84ORB%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/">
                     <div class="card-image">
@@ -774,9 +754,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-10-24
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-24
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -785,6 +765,7 @@
                         </span>
                     </div>
                 </div>
+
                 
             </div>
         </div>
@@ -795,13 +776,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/06/05/ghy-test-blog/">
+                <a href="/2022/06/10/AXI-Stream-note/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="ghy test blog">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="AXI-Stream note">
                         
-                        <span class="card-title">ghy test blog</span>
+                        <span class="card-title">AXI-Stream note</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -812,7 +793,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-05
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-10
                             </span>
                         <span class="publish-author">
                             
