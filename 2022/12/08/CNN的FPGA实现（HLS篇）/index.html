@@ -3,7 +3,7 @@
 
 
 <head>
-    <meta charset="utf-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
     <meta name="keywords" content="CNN的FPGA实现（HLS篇）, 动漫|学习">
     <meta name="description" content="本篇博客前半部分为神经网络的基础知识学习，后半部分结合HLS实现lenet5，用于手写数字识别
 Colab使用colab直接输入代码是输入python形式代码，如果再代码行前面加上！则解释器变为shell script
@@ -34,12 +34,12 @@ Colab使用colab直接输入代码是输入python形式代码，如果再代码�
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
-    <header class="navbar-fixed">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="navbar-fixed">
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
             <div class="brand-logo">
@@ -503,8 +503,9 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <img src="/2022/12/08/CNN%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0%EF%BC%88HLS%E7%AF%87%EF%BC%89/image-20211030154440362.png" alt="image-20211030154440362" style="zoom:50%;">
 
 <p>如何产生一个tensor？</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.tensor([[<span class="number">1</span>,<span class="number">1</span>],[-<span class="number">1</span>,<span class="number">1</span>]])</span><br><span class="line">x = torch.from_numpy(np.array([[<span class="number">1</span>,<span class="number">1</span>],[-<span class="number">1</span>,<span class="number">1</span>]]))</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">x <span class="token operator">=</span> torch<span class="token punctuation">.</span>tensor<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> torch<span class="token punctuation">.</span>from_numpy<span class="token punctuation">(</span>np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>除此之外，torch包提供了一系列直接生成tensor的函数，例如zeros（）、ones（）、rand()，在具体使用时，直接使用troch.zeros（）即可，或者使用上述代码行将一个list转变为tensor</p>
 <p>对于一个tensor，可以使用几种函数查看特性：shape，dtype，device</p>
 <p>同时，tensor支持的操作有：索引，切片，join，add（加法），mul（乘法）</p>
@@ -553,8 +554,11 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <img src="/2022/12/08/CNN%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0%EF%BC%88HLS%E7%AF%87%EF%BC%89/image-20211103005833687.png" alt="image-20211103005833687" style="zoom:50%;">
 
 <h3 id="seed"><a href="#seed" class="headerlink" title="seed"></a>seed</h3><p>用于在使用随机数的过程中产生随机数，只有在seed全部相同时，产生的随机数才完全一样，</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">np.random.seed(myseed)</span><br><span class="line">torch.manual_seed(myseed)</span><br><span class="line"><span class="keyword">if</span> torch.cuda.is_available():</span><br><span class="line">    torch.cuda.manual_seed_all(myseed)</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python">np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>seed<span class="token punctuation">(</span>myseed<span class="token punctuation">)</span>
+torch<span class="token punctuation">.</span>manual_seed<span class="token punctuation">(</span>myseed<span class="token punctuation">)</span>
+<span class="token keyword">if</span> torch<span class="token punctuation">.</span>cuda<span class="token punctuation">.</span>is_available<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    torch<span class="token punctuation">.</span>cuda<span class="token punctuation">.</span>manual_seed_all<span class="token punctuation">(</span>myseed<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>使用如上语句，就可以使神经网络的参数初始化相同，即你的算法可被他人复现</p>
 <h3 id="数据的预处理——标准化"><a href="#数据的预处理——标准化" class="headerlink" title="数据的预处理——标准化"></a>数据的预处理——标准化</h3><ul>
 <li>标准化和归一化能够显著提高模型的精度以及收敛速度</li>
@@ -621,8 +625,10 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <p><img src="/2022/12/08/CNN%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0%EF%BC%88HLS%E7%AF%87%EF%BC%89/image-20211120174600928.png" alt="image-20211120174600928"></p>
 <p>这个函数用来将一些需要的外部数据传入类中</p>
 <p>之后要实现类的第一个功能，打开csv文件</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;文件路径&#x27;</span>,<span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    dataset = <span class="built_in">list</span>(csv.reader(fp))</span><br><span class="line">    data = np.array(data[<span class="number">1</span>:])[:, <span class="number">1</span>:].astype(<span class="built_in">float</span>)</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'文件路径'</span><span class="token punctuation">,</span><span class="token string">'r'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fp<span class="token punctuation">:</span>
+    dataset <span class="token operator">=</span> list<span class="token punctuation">(</span>csv<span class="token punctuation">.</span>reader<span class="token punctuation">(</span>fp<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    data <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>data<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>astype<span class="token punctuation">(</span>float<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>这里有几处需要注意，csv.reader会返回一个reader对象，这个reader是有不同的行list组成的，于是再使用list（csv.reader会使得最后返回数据[[行1]，[行2],….[行n]]）</p>
 <p><img src="/2022/12/08/CNN%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0%EF%BC%88HLS%E7%AF%87%EF%BC%89/image-20211120183842388.png" alt="image-20211120183842388"></p>
 <p>效果如图所示</p>
@@ -636,25 +642,42 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <p>我们对当前估算有多大置信度，估计不确定性是后端主要考虑的问题，其中有一个变量很受关注（MAP），即最大后验概率，我们需要把不确定性表达出来，然后再加滤波器进行优化</p>
 <h3 id="matlab实现简单的神经网络"><a href="#matlab实现简单的神经网络" class="headerlink" title="matlab实现简单的神经网络"></a>matlab实现简单的神经网络</h3><p>1.正向传播（已有权重）</p>
 <p>对于每个cell，有N个对应前层权重，同时，有一个自带bias，这N+1个变量可用一行来定义，于是对于第一个隐藏层</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clear;clc;//清除缓存</span><br><span class="line">hidden_layer_cnum=<span class="built_in">zeros</span>(Hidden_layer_cnum,input_layer_cum+<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-matlab"><code class="language-matlab">clear<span class="token punctuation">;</span>clc<span class="token punctuation">;</span><span class="token operator">/</span><span class="token operator">/</span>清除缓存
+hidden_layer_cnum<span class="token operator">=</span><span class="token function">zeros</span><span class="token punctuation">(</span>Hidden_layer_cnum<span class="token punctuation">,</span>input_layer_cum<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>于是行数就是本层cell数量，列数就是前层cell加1（bias）</p>
 <p>中间层如下</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%------------输入层图像数据------------</span></span><br><span class="line">x=[x0,x1,......,xn];</span><br><span class="line">hidden_layerout = <span class="built_in">zeros</span>(<span class="number">1</span>,input_layer_cum)</span><br><span class="line"><span class="comment">%-------------向前传播部分-------------------</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:Hidden_layer_cnum;</span><br><span class="line">	sum_tmp=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:input_layer_cum</span><br><span class="line">		sum_tmp = sum_tmp+x(<span class="built_in">i</span>,<span class="built_in">j</span>)*hidden_layer_weight(<span class="built_in">i</span>,<span class="built_in">j</span>);</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	<span class="comment">%-----阈值------------</span></span><br><span class="line">	sum_tmp = sum_tmp-hidden_layer_weight(<span class="built_in">i</span>,input_layer_cum+<span class="number">1</span>);</span><br><span class="line">	<span class="comment">%------激活函数-----------------</span></span><br><span class="line">	hidden_layerout(<span class="number">1</span>,<span class="built_in">i</span>) = sigmoid(sum_tmp);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-matlab"><code class="language-matlab"><span class="token comment" spellcheck="true">%------------输入层图像数据------------</span>
+x<span class="token operator">=</span><span class="token punctuation">[</span>x0<span class="token punctuation">,</span>x1<span class="token punctuation">,</span><span class="token punctuation">...</span><span class="token punctuation">...</span><span class="token punctuation">,</span>xn<span class="token punctuation">]</span><span class="token punctuation">;</span>
+hidden_layerout <span class="token operator">=</span> <span class="token function">zeros</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span>input_layer_cum<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">%-------------向前传播部分-------------------</span>
+<span class="token keyword">for</span> <span class="token number">i</span><span class="token operator">=</span><span class="token number">1</span><span class="token operator">:</span>Hidden_layer_cnum<span class="token punctuation">;</span>
+    sum_tmp<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token number">j</span><span class="token operator">=</span><span class="token number">1</span><span class="token operator">:</span>input_layer_cum
+        sum_tmp <span class="token operator">=</span> sum_tmp<span class="token operator">+</span><span class="token function">x</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span><span class="token number">j</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token function">hidden_layer_weight</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span><span class="token number">j</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+    <span class="token comment" spellcheck="true">%-----阈值------------</span>
+    sum_tmp <span class="token operator">=</span> sum_tmp<span class="token operator">-</span><span class="token function">hidden_layer_weight</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span>input_layer_cum<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">%------激活函数-----------------</span>
+    <span class="token function">hidden_layerout</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">sigmoid</span><span class="token punctuation">(</span>sum_tmp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">end</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>对于输出层同理  </p>
 <p>权重偏置的训练：</p>
 <h3 id="2-反向传播：weight和bias的确定"><a href="#2-反向传播：weight和bias的确定" class="headerlink" title="2.反向传播：weight和bias的确定"></a>2.反向传播：weight和bias的确定</h3><p>前一层和后一层的非线性映射可以用矩阵的形式表示</p>
 <p>Y_N=W*Y_(N-1)</p>
 <p>$$<br>Loss =\frac{1}{2}(Z_{out}-Z_{gold})^2<br>$$</p>
 <p>$$<br>\left{<br>    \begin{array}<br>        ww=w-learnrate<em>\frac{\partial{Loss(w,b)}}{\partial{w}}\<br>        b=b-learnrate</em>\frac{\partial{Loss(w,b)}}{\partial{b}}<br>    \end{array}<br>\right}<br>$$</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%/////////////训练集设置//////////////</span></span><br><span class="line">data_set [<span class="number">0</span> <span class="number">0</span> <span class="number">0</span>;</span><br><span class="line">		  <span class="number">0</span> <span class="number">1</span> <span class="number">1</span>;</span><br><span class="line">		<span class="number">1</span> <span class="number">0</span> <span class="number">1</span>;];</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-matlab"><code class="language-matlab"><span class="token comment" spellcheck="true">%/////////////训练集设置//////////////</span>
+data_set <span class="token punctuation">[</span><span class="token number">0</span> <span class="token number">0</span> <span class="token number">0</span><span class="token punctuation">;</span>
+          <span class="token number">0</span> <span class="token number">1</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token number">1</span> <span class="token number">0</span> <span class="token number">1</span><span class="token punctuation">;</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>注：1.最后一个结果为{z-gold}</p>
 <p>​        2.</p>
 <h2 id="双目"><a href="#双目" class="headerlink" title="双目"></a>双目</h2><p>matlab相机标定（calib）</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.vision.caltech.edu/bouguetj/calib_doc/#start</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-html"><code class="language-html">http://www.vision.caltech.edu/bouguetj/calib_doc/#start
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>相机标定原因<br>$$<br>\lambda\left(<br>\matrix{x\<br>y\<br>1}<br>\right)=<br>\left(<br>\matrix{<br>f&amp;0&amp;0&amp;0\<br>0&amp;f&amp;0&amp;0\<br>0&amp;0&amp;1&amp;0<br>}<br>\right)<br>\left(\matrix{X\Y\Z\1}<br>\right)<br>$$<br>第一是sensor制造产生的误差，比如sensor成像单元不是正方形，sensor歪斜；第二是镜头制造和安装产生的误差，镜头一般存在非线性的径向畸变；镜头与相机sensor安装不平行，还会产生切向畸变</p>
 <p>利用calib工具箱</p>
 <img src="/2022/12/08/CNN%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0%EF%BC%88HLS%E7%AF%87%EF%BC%89/image-20220309203039650.png" alt="image-20220309203039650" style="zoom:50%;">
@@ -750,8 +773,10 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 <p>流水线限制在一个周期内完成做不到，修改流水线限制增大，但是这个报红好像可以不用管（如果自己系统需求不需要跑在100mhz以上，如果需要就增加流水线级数来降低estimated time）</p>
 <p>导出输入层参量：</p>
-<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fid = fopen(<span class="string">&#x27;x_v.h&#x27;</span>,<span class="string">&#x27;w&#x27;</span>);</span><br><span class="line">fprintf(fid,<span class="string">&#x27;%10.10f,\n&#x27;</span>,x_v);</span><br><span class="line">fclose(fid);</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-matlab"><code class="language-matlab">fid <span class="token operator">=</span> <span class="token function">fopen</span><span class="token punctuation">(</span><span class="token string">'x_v.h'</span><span class="token punctuation">,</span><span class="token string">'w'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">fprintf</span><span class="token punctuation">(</span>fid<span class="token punctuation">,</span><span class="token string">'%10.10f,\n'</span><span class="token punctuation">,</span>x_v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">fclose</span><span class="token punctuation">(</span>fid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <img src="/2022/12/08/CNN%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0%EF%BC%88HLS%E7%AF%87%EF%BC%89/image-20221123172812589.png" alt="image-20221123172812589" style="zoom:50%;">
 
 <p><img src="/2022/12/08/CNN%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0%EF%BC%88HLS%E7%AF%87%EF%BC%89/image-20221123172831910.png" alt="image-20221123172831910"></p>
@@ -764,8 +789,63 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <p><img src="/2022/12/08/CNN%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0%EF%BC%88HLS%E7%AF%87%EF%BC%89/image-20221207162326714.png" alt="image-20221207162326714"></p>
 <p>实际上板测试</p>
 <p>sdk源码如下</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * main.c</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *  Created on: 2022年12月8日</span></span><br><span class="line"><span class="comment"> *      Author: guohongyang</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;xparameters.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;xlenet_coconut.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;sleep.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;time.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;xtime_l.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">float</span> img[<span class="number">784</span>] = &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;./data/img.h&quot;</span></span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	XTime t1,t2;</span><br><span class="line">	Xil_DCacheDisable();</span><br><span class="line">	<span class="comment">//--------------------延时启动--------------------------</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">		sleep(<span class="number">2</span>);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;=====%d==========\n&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//--------------------量化输入--------------------------</span></span><br><span class="line">	<span class="keyword">int</span> *img_fixed = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(<span class="number">784</span>*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">	<span class="keyword">int</span> *out = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(<span class="number">10</span>*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;<span class="number">784</span>;i++)</span><br><span class="line">		img_fixed[i] = img[i]*<span class="number">65536</span>;</span><br><span class="line">	<span class="comment">//--------------------初始化IP--------------------------</span></span><br><span class="line">	XLenet_coconut Lenet_coconut;</span><br><span class="line">	XLenet_coconut_Initialize(&amp;Lenet_coconut,XPAR_LENET_COCONUT_0_DEVICE_ID);</span><br><span class="line">	XLenet_coconut_Set_img_in_V(&amp;Lenet_coconut,img_fixed);</span><br><span class="line">	XLenet_coconut_Set_out_V(&amp;Lenet_coconut,out);</span><br><span class="line">	<span class="comment">//--------------------calculate--------------------------</span></span><br><span class="line">	XLenet_coconut_Start(&amp;Lenet_coconut);</span><br><span class="line">	XTime_GetTime(&amp;t1);</span><br><span class="line">	<span class="keyword">while</span>(XLenet_coconut_IsDone(&amp;Lenet_coconut)==<span class="number">0</span>);</span><br><span class="line">	XTime_GetTime(&amp;t2);</span><br><span class="line">	<span class="comment">//--------------------PRINT--------------------------</span></span><br><span class="line">	<span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> max_index ;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span> ;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">		<span class="keyword">float</span> tmp = (<span class="keyword">float</span>)out[i]/<span class="number">65536.0f</span>;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%f\n&quot;</span>,tmp);</span><br><span class="line">		<span class="keyword">if</span>(tmp&gt;max)&#123;</span><br><span class="line">			max_index = i;</span><br><span class="line">			max = tmp;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;网络预测结果: %d\n&quot;</span>,max_index);</span><br><span class="line">	<span class="keyword">float</span> tc = (<span class="keyword">float</span>)(t2-t1)/COUNTS_PER_SECOND;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;time cost: %f\n&quot;</span>,tc);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token comment" spellcheck="true">/*
+ * main.c
+ *
+ *  Created on: 2022年12月8日
+ *      Author: guohongyang
+ */</span>
 
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"xparameters.h"</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"xlenet_coconut.h"</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"sleep.h"</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"time.h"</span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"xtime_l.h"</span></span>
+
+<span class="token keyword">float</span> img<span class="token punctuation">[</span><span class="token number">784</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"./data/img.h"</span></span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    XTime t1<span class="token punctuation">,</span>t2<span class="token punctuation">;</span>
+    <span class="token function">Xil_DCacheDisable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//--------------------延时启动--------------------------</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span><span class="token number">10</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"=====%d==========\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//--------------------量化输入--------------------------</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>img_fixed <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">784</span><span class="token operator">*</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>out <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token operator">*</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span><span class="token number">784</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span>
+        img_fixed<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> img<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">*</span><span class="token number">65536</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//--------------------初始化IP--------------------------</span>
+    XLenet_coconut Lenet_coconut<span class="token punctuation">;</span>
+    <span class="token function">XLenet_coconut_Initialize</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Lenet_coconut<span class="token punctuation">,</span>XPAR_LENET_COCONUT_0_DEVICE_ID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">XLenet_coconut_Set_img_in_V</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Lenet_coconut<span class="token punctuation">,</span>img_fixed<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">XLenet_coconut_Set_out_V</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Lenet_coconut<span class="token punctuation">,</span>out<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//--------------------calculate--------------------------</span>
+    <span class="token function">XLenet_coconut_Start</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Lenet_coconut<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">XTime_GetTime</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>t1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token function">XLenet_coconut_IsDone</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Lenet_coconut<span class="token punctuation">)</span><span class="token operator">==</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">XTime_GetTime</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>t2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//--------------------PRINT--------------------------</span>
+    <span class="token keyword">int</span> max <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> max_index <span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span> <span class="token punctuation">;</span>i<span class="token operator">&lt;</span><span class="token number">10</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">float</span> tmp <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">float</span><span class="token punctuation">)</span>out<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">/</span><span class="token number">65536.0f</span><span class="token punctuation">;</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%f\n"</span><span class="token punctuation">,</span>tmp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>tmp<span class="token operator">></span>max<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            max_index <span class="token operator">=</span> i<span class="token punctuation">;</span>
+            max <span class="token operator">=</span> tmp<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"网络预测结果: %d\n"</span><span class="token punctuation">,</span>max_index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">float</span> tc <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">float</span><span class="token punctuation">)</span><span class="token punctuation">(</span>t2<span class="token operator">-</span>t1<span class="token punctuation">)</span><span class="token operator">/</span>COUNTS_PER_SECOND<span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"time cost: %f\n"</span><span class="token punctuation">,</span>tc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <img src="/2022/12/08/CNN%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0%EF%BC%88HLS%E7%AF%87%EF%BC%89/image-20221208161639506.png" alt="image-20221208161639506" style="zoom:50%;">
 
 <p>实际上板测试效果如图，可以正确预测网络结果，网络计算耗时如下，单帧计算耗时约为1ms</p>
@@ -1005,18 +1085,17 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/12/08/CNN%E7%9A%84FPGA%E5%AE%9E%E7%8E%B0%EF%BC%88HLS%E7%AF%87%EF%BC%89/">
+                <a href="/2023/02/27/C-thread%E7%B1%BB%E4%BB%A5%E5%8F%8A%E8%BD%AC%E6%8D%A2%E5%88%B0python%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="CNN的FPGA实现（HLS篇）">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="C++thread类以及转换到python中的使用">
                         
-                        <span class="card-title">CNN的FPGA实现（HLS篇）</span>
+                        <span class="card-title">C++thread类以及转换到python中的使用</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1026,9 +1105,9 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-12-08
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-02-27
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1037,7 +1116,6 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -1257,7 +1335,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2022</span>
+                <span id="year">2019-2023</span>
             
             <a href="/about" target="_blank">卯卯</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -1501,6 +1579,6 @@ $(function () {
     <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"react":{"opacity":0.7}});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"react":{"opacity":0.7}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 
 </html>

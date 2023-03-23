@@ -3,7 +3,7 @@
 
 
 <head>
-    <meta charset="utf-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
     <meta name="keywords" content="hls(ug902), 动漫|学习">
     <meta name="description" content="HLS就是用C++或者C实现RTL的方式
 在使用HLS时，主要考虑两个方面
@@ -38,12 +38,12 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<meta name="generator" content="Hexo 5.4.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
-    <header class="navbar-fixed">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="navbar-fixed">
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
             <div class="brand-logo">
@@ -503,8 +503,8 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <p>接口这里需要注意的是，不但需要描述port，同时接口也包括协议，对于port的位宽，类型以及方向是通过顶层文件的参数和返回值推断出来的，协议是通过端口的表现或者说行为表现出来的，接口类型包括：网线，寄存器，单向和双向握手信号，FIFO，存储器和总线</p>
 <p>首先有一些常用的库</p>
 <p>例如‘ap_cint.h’包括对于<strong>任意精度整数</strong>类型的支持</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">led_twinkle</span><span class="params">(uint2 *led)</span></span></span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-C"><code class="language-C">void led_twinkle(uint2 *led)
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h3 id="UG902"><a href="#UG902" class="headerlink" title="UG902"></a>UG902</h3><p>HLS有一些比较关键的阶段</p>
 <ul>
 <li><p>scheduling(调度)：此种操作根据每个时钟周期决定哪些操作发生，而影响每个时钟周期内进行何种操作的因素包括</p>
@@ -548,23 +548,40 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <h4 id="数据类型的定义"><a href="#数据类型的定义" class="headerlink" title="数据类型的定义"></a>数据类型的定义</h4><h5 id="整形"><a href="#整形" class="headerlink" title="整形"></a>整形</h5><p>HLS中在C，C++可以提供整数和定点任意精度数据类型</p>
 <img src="/2022/11/18/hls-ug902/image-20221118160918745.png" alt="image-20221118160918745" style="zoom:50%;">
 
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//C：</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ap_cint.h&quot;</span></span></span><br><span class="line">intN,uintN <span class="comment">//N~[1,1024]</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//C++：</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;ap_int.h&quot;</span></span></span><br><span class="line">ap_int&lt;N&gt;,ap_uint&lt;N&gt; <span class="comment">//N~[1,1024]</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//example</span></span><br><span class="line">ap_int&lt;<span class="number">9</span>&gt; var1; <span class="comment">//9bit</span></span><br><span class="line">ap_uint&lt;<span class="number">10</span>&gt; var2; <span class="comment">//10bit unsigned    </span></span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-c"><code class="language-c"><span class="token comment" spellcheck="true">//C：</span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"ap_cint.h"</span></span>
+intN<span class="token punctuation">,</span>uintN <span class="token comment" spellcheck="true">//N~[1,1024]</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c++"><code class="language-c++">//C++：
+#include "ap_int.h"
+ap_int<N>,ap_uint<N> //N~[1,1024]
+    
+//example
+ap_int<9> var1; //9bit
+ap_uint<10> var2; //10bit unsigned    
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h5 id="定点数"><a href="#定点数" class="headerlink" title="定点数"></a>定点数</h5><p>定点数数据部分分为整数和定点数两个部分</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include &lt;ap_fixed.h&gt;</span></span><br><span class="line"></span><br><span class="line">ap_fixed&lt;<span class="number">10</span>,<span class="number">3</span>,AP_RND&gt; my_type; </span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c#"><code class="language-c#">#include <ap_fixed.h>
 
+ap_fixed<10,3,AP_RND> my_type; 
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>上面的代码规定了一个总共10bit的定点数，其中3位用来表述小数点以上的数字，剩下7位则是表示小数点以后的数字，<strong>在不同位数进行计算时，小数点会自动对齐</strong>，同时ap_fixed数据类型的使用参考以下表格</p>
 <img src="/2022/11/18/hls-ug902/image-20221118165038676.png" alt="image-20221118165038676" style="zoom: 50%;">
 
 <p>主要说明以下Q和O两个参数，Q是计算结果超过数能表示的最小精度时，比如保留小数点位数为2，计算结果产生小数点后三位的数，这时将进行舍入，AP_RND表示舍入到正无穷，AP_RND_ZERO表示后面小数点部分数字全都不要</p>
-<h5 id="半精度浮点数"><a href="#半精度浮点数" class="headerlink" title="半精度浮点数"></a>半精度浮点数</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;hls_half.h&quot;</span></span></span><br><span class="line"><span class="keyword">typedef</span> half <span class="keyword">data_t</span></span><br></pre></td></tr></table></figure>
-
+<h5 id="半精度浮点数"><a href="#半精度浮点数" class="headerlink" title="半精度浮点数"></a>半精度浮点数</h5><pre class="line-numbers language-c++"><code class="language-c++">#include "hls_half.h"
+typedef half data_t
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <h4 id="接口优化"><a href="#接口优化" class="headerlink" title="接口优化"></a>接口优化</h4><p>C语言的设计中，代码的输入输出都是通过形参完成，RTL输入输出主要通过port完成，并且需要遵循特定的端口协议进行操作，HLS提供两种IO协议</p>
 <h5 id="接口综合"><a href="#接口综合" class="headerlink" title="接口综合"></a>接口综合</h5><p>当生成wraaper时，该函数的参数（或参数）被合成到RTL端口中。这个过程称为界面合成</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;sum_io.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">dout_t</span> <span class="title">sum_io</span><span class="params">(<span class="keyword">din_t</span> in1, <span class="keyword">din_t</span> in2, <span class="keyword">dio_t</span> *sum)</span> </span>&#123;</span><br><span class="line"><span class="keyword">dout_t</span> temp;</span><br><span class="line">*sum = in1 + in2 + *sum;</span><br><span class="line">temp = in1 + in2;</span><br><span class="line"><span class="keyword">return</span>  temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"sum_io.h"</span></span>
+dout_t <span class="token function">sum_io</span><span class="token punctuation">(</span>din_t in1<span class="token punctuation">,</span> din_t in2<span class="token punctuation">,</span> dio_t <span class="token operator">*</span>sum<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+dout_t temp<span class="token punctuation">;</span>
+<span class="token operator">*</span>sum <span class="token operator">=</span> in1 <span class="token operator">+</span> in2 <span class="token operator">+</span> <span class="token operator">*</span>sum<span class="token punctuation">;</span>
+temp <span class="token operator">=</span> in1 <span class="token operator">+</span> in2<span class="token punctuation">;</span>
+<span class="token keyword">return</span>  temp<span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>上述代码被综合后的电路如下所示</p>
 <img src="/2022/11/18/hls-ug902/image-20221121150252304.png" alt="image-20221121150252304" style="zoom:50%;">
 
@@ -574,10 +591,67 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <li>块语句接口：ap_start,ap_done,ap_ready,ap_idle</li>
 <li>端口级接口协议：in1，in2，sum_o</li>
 </ul>
-<h4 id="代码语言规范"><a href="#代码语言规范" class="headerlink" title="代码语言规范"></a>代码语言规范</h4><h5 id="循环的展开"><a href="#循环的展开" class="headerlink" title="循环的展开"></a>循环的展开</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//头文件部分</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> FOROPT_H_</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FOROPT_H_</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ap_int.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 3</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> XW 8 </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BW 16</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> ap_int&lt;XW&gt; <span class="keyword">dx_t</span>;</span><br><span class="line"><span class="keyword">typedef</span> ap_int&lt;BW&gt; <span class="keyword">db_t</span>;</span><br><span class="line"><span class="keyword">typedef</span> ap_int&lt;BW+<span class="number">1</span>&gt; <span class="keyword">do_t</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">dx_t</span> xin[N],<span class="keyword">dx_t</span> a,<span class="keyword">db_t</span> b,<span class="keyword">db_t</span> c,<span class="keyword">do_t</span> yo[N])</span></span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="代码语言规范"><a href="#代码语言规范" class="headerlink" title="代码语言规范"></a>代码语言规范</h4><h5 id="循环的展开"><a href="#循环的展开" class="headerlink" title="循环的展开"></a>循环的展开</h5><pre class="line-numbers language-C"><code class="language-C">//头文件部分
+#ifndef FOROPT_H_
+#define FOROPT_H_
 
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;for_opt.h&quot;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">dx_t</span> xin[N],<span class="keyword">dx_t</span> a,<span class="keyword">db_t</span> b,<span class="keyword">db_t</span> c,<span class="keyword">do_t</span> yo[N])</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> *总循环的次数是N，N称之为LOOP trip COUNT</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *总的操作流程如下（考虑到IP是一个一直工作的，也就能理解为啥这个模块是循环往复的）：</span></span><br><span class="line"><span class="comment"> *循环开始</span></span><br><span class="line"><span class="comment"> * C0：获取b,c的数据;</span></span><br><span class="line"><span class="comment"> * C1：获取xin的i个地址</span></span><br><span class="line"><span class="comment"> * C2：读取xin[i]中的数据</span></span><br><span class="line"><span class="comment"> * C3：完成相应的计算</span></span><br><span class="line"><span class="comment"> * C1：获取xin的i个地址</span></span><br><span class="line"><span class="comment"> * C2：读取xin[i]中的数据</span></span><br><span class="line"><span class="comment"> * C3：完成相应的计算</span></span><br><span class="line"><span class="comment"> * ...</span></span><br><span class="line"><span class="comment"> *循环结束</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *循环开始</span></span><br><span class="line"><span class="comment"> * ...</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * for循环一次需要3个时钟周期，就是上边的  C1，C2，C3</span></span><br><span class="line"><span class="comment"> * 那么这个3就是LOOP iteration latency.（iteration：迭代）</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * i次for循环与i+1次for循环的间隔是3，那么LOOP iteration Interval(LOOP II)也是3</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * loop latency =3*N,也就是循环次数N与单次循环所占的时钟周期的乘积</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 如果loop latency 加上取b，c两数的时钟周期，就是整个function latency=3*N+1</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 从这个函数的第一次初始化开始，到下一次初始化结束，这个称之为函数初始间隔（interval）</span></span><br><span class="line"><span class="comment"> * 那么function initial interval(Function II)=11</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * */</span></span><br><span class="line">    loop:</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;N;i++)&#123;</span><br><span class="line">        yo[i]=a*xin[i]+b+c;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+
+#include <ap_int.h>
+#define N 3
+#define XW 8 
+#define BW 16
+
+typedef ap_int<XW> dx_t;
+typedef ap_int<BW> db_t;
+typedef ap_int<BW+1> do_t;
+
+
+void foo(dx_t xin[N],dx_t a,db_t b,db_t c,do_t yo[N]);
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"for_opt.h"</span></span>
+ 
+<span class="token keyword">void</span> <span class="token function">foo</span><span class="token punctuation">(</span>dx_t xin<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">,</span>dx_t a<span class="token punctuation">,</span>db_t b<span class="token punctuation">,</span>db_t c<span class="token punctuation">,</span>do_t yo<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">/*
+ *总循环的次数是N，N称之为LOOP trip COUNT
+ *
+ *总的操作流程如下（考虑到IP是一个一直工作的，也就能理解为啥这个模块是循环往复的）：
+ *循环开始
+ * C0：获取b,c的数据;
+ * C1：获取xin的i个地址
+ * C2：读取xin[i]中的数据
+ * C3：完成相应的计算
+ * C1：获取xin的i个地址
+ * C2：读取xin[i]中的数据
+ * C3：完成相应的计算
+ * ...
+ *循环结束
+ *
+ *循环开始
+ * ...
+ * */</span>
+<span class="token comment" spellcheck="true">/*
+ * for循环一次需要3个时钟周期，就是上边的  C1，C2，C3
+ * 那么这个3就是LOOP iteration latency.（iteration：迭代）
+ *
+ * i次for循环与i+1次for循环的间隔是3，那么LOOP iteration Interval(LOOP II)也是3
+ *
+ * loop latency =3*N,也就是循环次数N与单次循环所占的时钟周期的乘积
+ *
+ * 如果loop latency 加上取b，c两数的时钟周期，就是整个function latency=3*N+1
+ *
+ * 从这个函数的第一次初始化开始，到下一次初始化结束，这个称之为函数初始间隔（interval）
+ * 那么function initial interval(Function II)=11
+ *
+ * */</span>
+    loop<span class="token punctuation">:</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span>N<span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        yo<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">=</span>a<span class="token operator">*</span>xin<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">+</span>b<span class="token operator">+</span>c<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+ 
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2022/11/18/hls-ug902/image-20221121111714383.png" alt="image-20221121111714383"></p>
 <p>最后时序如图，消耗总周期是10个周期</p>
 <h4 id="优化指令"><a href="#优化指令" class="headerlink" title="优化指令"></a>优化指令</h4><p>优化指令应用对象有这些：</p>
@@ -598,8 +672,15 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <h5 id="allocation指令"><a href="#allocation指令" class="headerlink" title="allocation指令"></a>allocation指令</h5><p>allocation用于指定函数实例的个数，比如函数中有四个函数的foo的实例，allowcation可以将实例数目限制在一个，四个实例都使用相同的RTL块来实现，</p>
 <p><code>instances=</code>：指定函数、运算符或内核的名称</p>
 <p><code>limit=</code>：可选地指定要在内核中使用的实例的限制</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS allocation instances=<span class="meta-string">&lt;list&gt;</span>  limit=<span class="meta-string">&lt;value&gt;</span> <span class="meta-string">&lt;type&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS allocation instances=foo limit=2 function<span class="comment">//将foo实例限制为2</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">my_func</span><span class="params">(<span class="keyword">data_t</span> angle)</span> </span>&#123; </span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS allocation instances=mul limit=1 operation </span></span><br><span class="line">...</span><br><span class="line">&#125;<span class="comment">//限制乘法器的操作数是1</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c++"><code class="language-c++">#pragma HLS allocation instances=<list>  limit=<value> <type>
+#pragma HLS allocation instances=foo limit=2 function//将foo实例限制为2
 
+
+void my_func(data_t angle) &#123; 
+#pragma HLS allocation instances=mul limit=1 operation 
+...
+&#125;//限制乘法器的操作数是1
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="HLS数组的优化"><a href="#HLS数组的优化" class="headerlink" title="HLS数组的优化"></a>HLS数组的优化</h4><p>因为硬件中数组的实现hls往往采用单口或双口ram来实现，ram端口位宽往往是单次操作的数据的位宽，这样在循环累加的操作时，数据需要消耗大量时钟周期在数据读取上，每个数据需要进行取地址以及读数据两个周期</p>
 <h5 id="array-partition数组展开"><a href="#array-partition数组展开" class="headerlink" title="array partition数组展开"></a>array partition数组展开</h5><p><img src="/2022/11/18/hls-ug902/image-20221124160639570.png" alt="image-20221124160639570"></p>
 <p>array partition展开有三种方式，block就是按照顺序将整个block拆开成多个ram，cyclic则类似多体交叉存储器的结构，这种结构利于实现i[0]+i[1]+i[2]之类的算法，complete就是完全拆开，有多少个ram就有多少个ram</p>
@@ -611,8 +692,13 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <h5 id="array-map数组拼接"><a href="#array-map数组拼接" class="headerlink" title="array map数组拼接"></a>array map数组拼接</h5><p>由于fpga的bram的块是由固定的大小的块组成，不同的数组若比较小，bram资源会存在大量浪费，可以使用array map将多个比较小的数组拼接成一个数组</p>
 <img src="/2022/11/18/hls-ug902/image-20221124161551823.png" alt="image-20221124161551823" style="zoom:50%;">
 
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS array_partition variable=m_accum  cyclic factor=2 dim=1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS array_partition variable=v_accum  cyclic factor=2 dim=1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS array_map variable=m_accum[0]  instance=mv_accum horizonal</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS array_map variable=v_accum[0]  instance=mv_accum horizonal</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS array_map variable=m_accum[1]  instance=mv_accum1 horizonal</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS array_map variable=v_accum[1]  instance=mv_accum1 horizonal</span></span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">pragma</span> HLS array_partition variable=m_accum  cyclic factor=2 dim=1</span>
+<span class="token macro property">#<span class="token directive keyword">pragma</span> HLS array_partition variable=v_accum  cyclic factor=2 dim=1</span>
+<span class="token macro property">#<span class="token directive keyword">pragma</span> HLS array_map variable=m_accum[0]  instance=mv_accum horizonal</span>
+<span class="token macro property">#<span class="token directive keyword">pragma</span> HLS array_map variable=v_accum[0]  instance=mv_accum horizonal</span>
+<span class="token macro property">#<span class="token directive keyword">pragma</span> HLS array_map variable=m_accum[1]  instance=mv_accum1 horizonal</span>
+<span class="token macro property">#<span class="token directive keyword">pragma</span> HLS array_map variable=v_accum[1]  instance=mv_accum1 horizonal</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>最终实现如下图所示，占用两块bram，bram存储数据如下</p>
 <img src="/2022/11/18/hls-ug902/image-20221124162710309.png" alt="image-20221124162710309" style="zoom: 50%;">
 
@@ -620,8 +706,12 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <p><img src="/2022/11/18/hls-ug902/image-20221124163157035.png" alt="image-20221124163157035"></p>
 <h4 id="循环的优化"><a href="#循环的优化" class="headerlink" title="循环的优化"></a>循环的优化</h4><h5 id="pipeline指令"><a href="#pipeline指令" class="headerlink" title="pipeline指令"></a>pipeline指令</h5><p><img src="/2022/11/18/hls-ug902/image-20221121111921118.png" alt="image-20221121111921118"></p>
 <h5 id="unroll指令"><a href="#unroll指令" class="headerlink" title="unroll指令"></a>unroll指令</h5><p>全部展开就复制循环边界数量的电路，主要这里需要部分展开，<strong>factor就是电路复制的次数</strong></p>
-<h4 id="接口的优化"><a href="#接口的优化" class="headerlink" title="接口的优化"></a>接口的优化</h4><h5 id="interface指令"><a href="#interface指令" class="headerlink" title="interface指令"></a>interface指令</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS interface mode=<span class="meta-string">&lt;mode&gt;</span> port=<span class="meta-string">&lt;name&gt;</span> bundle=<span class="meta-string">&lt;string&gt;</span> \</span></span><br><span class="line"><span class="keyword">register</span> register_mode=&lt;mode&gt; depth=&lt;<span class="keyword">int</span>&gt; offset=&lt;<span class="built_in">string</span>&gt; latency=&lt;value&gt;\</span><br><span class="line">clock=&lt;<span class="built_in">string</span>&gt; name=&lt;<span class="built_in">string</span>&gt; storage_type=&lt;value&gt;\</span><br><span class="line">num_read_outstanding=&lt;<span class="keyword">int</span>&gt; num_write_outstanding=&lt;<span class="keyword">int</span>&gt; \</span><br><span class="line">max_read_burst_length=&lt;<span class="keyword">int</span>&gt; max_write_burst_length=&lt;<span class="keyword">int</span>&gt;</span><br></pre></td></tr></table></figure>
-
+<h4 id="接口的优化"><a href="#接口的优化" class="headerlink" title="接口的优化"></a>接口的优化</h4><h5 id="interface指令"><a href="#interface指令" class="headerlink" title="interface指令"></a>interface指令</h5><pre class="line-numbers language-C"><code class="language-C">#pragma HLS interface mode=<mode> port=<name> bundle=<string> \
+register register_mode=<mode> depth=<int> offset=<string> latency=<value>\
+clock=<string> name=<string> storage_type=<value>\
+num_read_outstanding=<int> num_write_outstanding=<int> \
+max_read_burst_length=<int> max_write_burst_length=<int>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>HLS的接口约束设置语言如上，下面介绍每个参数的作用</p>
 <ul>
 <li><strong>mode=<mode></mode></strong></li>
@@ -670,14 +760,38 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 </ul>
 <p>当模式为 m_axi 时，这指定了 AXI4 接口的预期延迟，允许设计在读取或写入预期之前的多个周期（延迟）启动总线请求。 如果这个数字太低，设计就会过早准备好并可能在等待总线时停止。 如果这个数字太高，可以授予总线访问权限，但总线可能会停止等待设计开始访问</p>
 <h4 id="HLS从外部存储器获得数据的快速方式"><a href="#HLS从外部存储器获得数据的快速方式" class="headerlink" title="HLS从外部存储器获得数据的快速方式"></a>HLS从外部存储器获得数据的快速方式</h4><p>从DDR获取数据的方式主要通过AXI-HP接口的方式，但是如下接口HLS优化指令综合的电路只能是单次传输，而非burst传输，这样浪费大量时钟</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">LeNet_CoConut</span><span class="params">(D32 img_in[<span class="number">28</span>][<span class="number">28</span>],D32 out[<span class="number">256</span>])</span></span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS INTERFACE s_axilite port=return bundle=CONTROL</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS INTERFACE m_axi depth=256 port=out offset=slave bundle=OUT</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS INTERFACE m_axi depth=784 port=img_in offset=slave bundle=IMG_IN</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-C"><code class="language-C">void LeNet_CoConut(D32 img_in[28][28],D32 out[256])&#123;
+#pragma HLS INTERFACE s_axilite port=return bundle=CONTROL
+#pragma HLS INTERFACE m_axi depth=256 port=out offset=slave bundle=OUT
+#pragma HLS INTERFACE m_axi depth=784 port=img_in offset=slave bundle=IMG_IN
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>如果想让HP接口进行burst传输，需要选用memcpy函数，但需要注意的是，memcpy只能对综合电路的顶层函数传递时，参能完成综合成HP的burst传输模式</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">example</span><span class="params">(<span class="keyword">volatile</span> <span class="keyword">int</span> *a)</span></span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS INTERFACE m_axi depth=50 port=a</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS INTERFACE s_axilite port=return</span></span><br><span class="line"><span class="comment">//Port a is assigned to an AXI4 master interface</span></span><br><span class="line"><span class="keyword">int</span> i;</span><br><span class="line"><span class="keyword">int</span> buff[<span class="number">50</span>];</span><br><span class="line"><span class="comment">//memcpy creates a burst access to memory</span></span><br><span class="line"><span class="built_in">memcpy</span>(buff,(<span class="keyword">const</span> <span class="keyword">int</span>*)a,<span class="number">50</span>*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>; i &lt; <span class="number">50</span>; i++)&#123;</span><br><span class="line">buff[i] = buff[i] + <span class="number">100</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">memcpy</span>((<span class="keyword">int</span> *)a,buff,<span class="number">50</span>*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-C"><code class="language-C">void example(volatile int *a)&#123;
+#pragma HLS INTERFACE m_axi depth=50 port=a
+#pragma HLS INTERFACE s_axilite port=return
+//Port a is assigned to an AXI4 master interface
+int i;
+int buff[50];
+//memcpy creates a burst access to memory
+memcpy(buff,(const int*)a,50*sizeof(int));
+for(i=0; i < 50; i++)&#123;
+buff[i] = buff[i] + 100;
+&#125;
+memcpy((int *)a,buff,50*sizeof(int));
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>两次memcpy实现了顶层模块与外部存储器的读写模式，其中以上例中的最后一条语句为例，burst的输出可以用for循环来实现</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>; i &lt; <span class="number">50</span>; i++)&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS PIPELINE</span></span><br><span class="line">a[i] = buff[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="built_in">memcpy</span>((<span class="keyword">int</span> *)a,buff,<span class="number">50</span>*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token comment" spellcheck="true">//1</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span>i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">50</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<span class="token macro property">#<span class="token directive keyword">pragma</span> HLS PIPELINE</span>
+a<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> buff<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 
+
+<span class="token comment" spellcheck="true">//2</span>
+<span class="token function">memcpy</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">)</span>a<span class="token punctuation">,</span>buff<span class="token punctuation">,</span><span class="token number">50</span><span class="token operator">*</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>其中1和2都可以实现顶层的burst传输，但是使用for循环来进行burst传输有几个需要注意的点</p>
 <ul>
 <li>循环必须被流水线指令展开</li>
@@ -691,8 +805,14 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 <p><strong>3.num_read_outstanding</strong>：在没有响应的情况下，发出读请求的最大次数，同时这个参数也与axisfifo的大小有关系<br>$$<br>fifo size = num_read_outstanding<em>max_read_burst_length</em>word_size.<br>$$<br><strong>4.max_write_burst_length</strong></p>
 <p><strong>5.num_write_outstanding</strong></p>
 <p>下面是m_axis 的pragma实例</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> HLS interface m_axi port=input offset=slave bundle=gmem0 </span></span><br><span class="line">depth=<span class="number">1024</span>*<span class="number">1024</span>*<span class="number">16</span>/(<span class="number">512</span>/<span class="number">8</span>) </span><br><span class="line">latency=<span class="number">100</span> </span><br><span class="line">num_read_outstanding=<span class="number">32</span> </span><br><span class="line">num_write_outstanding=<span class="number">32</span> </span><br><span class="line">max_read_burst_length=<span class="number">16</span></span><br><span class="line">max_write_burst_length=<span class="number">16</span></span><br></pre></td></tr></table></figure>
-
+<pre class="line-numbers language-C"><code class="language-C">#pragma HLS interface m_axi port=input offset=slave bundle=gmem0 
+depth=1024*1024*16/(512/8) 
+latency=100 
+num_read_outstanding=32 
+num_write_outstanding=32 
+max_read_burst_length=16
+max_write_burst_length=16
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="CODE-EXAMPLE"><a href="#CODE-EXAMPLE" class="headerlink" title="CODE EXAMPLE"></a>CODE EXAMPLE</h4><p>对于HLS的循环，如果循环是变量，则HLS无法确定对应循环的latency，综合后的报告对应latency是一个？，如果采用宏定义就可以确定循环边界，xilinx官方提供了hls各种指令的标准例程，不过这些指令是以directive指令插入的</p>
 <img src="/2022/11/18/hls-ug902/image-20221204180618595.png" alt="image-20221204180618595" style="zoom: 67%;">
 
@@ -1182,7 +1302,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2019-2022</span>
+                <span id="year">2019-2023</span>
             
             <a href="/about" target="_blank">卯卯</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
@@ -1426,6 +1546,6 @@ $(function () {
     <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"react":{"opacity":0.7}});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"react":{"opacity":0.7}});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
 
 </html>
